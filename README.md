@@ -1,3 +1,5 @@
+[![CI/CD Pipeline](https://github.com/hvmdvvn/Flask-Task-Manager-CI-CD/actions/workflows/ci.yml/badge.svg)](https://github.com/hvmdvvn/Flask-Task-Manager-CI-CD/actions/workflows/ci.yml)
+
 # Flask Task Manager API
 
 This repository contains a **Task Manager REST API** built with **Flask**, **SQLAlchemy**, and **Swagger (Flasgger)**.

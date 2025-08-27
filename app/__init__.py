@@ -5,12 +5,17 @@ from .routes.user_routes import user_bp
 from .routes.task_routes import task_bp
 from .routes.health_routes import health_bp
 
-def create_app():
+def create_app(testing: bool = False):
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "supersecret"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tasks.db"
 
-    # 👇 Add this Swagger config
+    if testing:
+        # Use in-memory DB for unit tests
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///:memory:"
+    else:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///tasks.db"
+
+    # Swagger config
     app.config['SWAGGER'] = {
         "title": "Task Manager API",
         "uiversion": 3,
@@ -18,12 +23,15 @@ def create_app():
         "swagger_ui": True,
         "specs_route": "/docs/",
         "servers": [
-            {"url": "https://verbose-orbit-6975wg67wvpj3r9x6-5000.app.github.dev"}  # 👈 your Codespace URL
+            {
+                "url": "https://verbose-orbit-6975wg67wvpj3r9x6-5000.app.github.dev"  
+            }
         ]
     }
 
     init_db(app)
 
+    # Register blueprints
     app.register_blueprint(user_bp, url_prefix="/api/users")
     app.register_blueprint(task_bp, url_prefix="/api/tasks")
     app.register_blueprint(health_bp, url_prefix="/")
@@ -31,4 +39,3 @@ def create_app():
     Swagger(app)
 
     return app
-
